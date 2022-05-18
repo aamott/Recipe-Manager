@@ -1,0 +1,41 @@
+{
+  "name": "recipe-manager",
+  "version": "1.0.0",
+  "description": "A recipe manager that lets users store and edit their own recipe book",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "format": "prettier --write ./**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint './**/*.{js,jsx,ts,tsx}' --fix",
+    "swagger-autogen": "node ./swagger.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aamott/Recipe-Manager.git"
+  },
+  "author": "aamott",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aamott/Recipe-Manager/issues"
+  },
+  "homepage": "https://github.com/aamott/Recipe-Manager#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "graphql": "^16.5.0",
+    "mongodb": "^4.6.0",
+    "nodemon": "^2.0.16",
+    "swagger-autogen": "^2.21.1",
+    "swagger-ui-express": "^4.4.0",
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.2"
+  }
+}
