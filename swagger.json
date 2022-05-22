@@ -1,13 +1,15 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Recipes",
+    "title": "Recipe Manager",
     "description": "A web app for managing recipes",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
+  "host": "therecipetracker.herokuapp.com",
   "basePath": "/",
-  "schemes": ["http"],
+  "schemes": [
+    "https"
+  ],
   "paths": {
     "/api-docs": {
       "get": {
@@ -19,7 +21,9 @@
     "/recipes/": {
       "get": {
         "description": "",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -29,7 +33,9 @@
       },
       "post": {
         "description": "Create a new recipe. Returns the new recipe id.",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "body",
@@ -81,7 +87,9 @@
     "/recipes/{id}": {
       "get": {
         "description": "Get a single recipe by id",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -98,7 +106,9 @@
       },
       "put": {
         "description": "Update a contact",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "id",
