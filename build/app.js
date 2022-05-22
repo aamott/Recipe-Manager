@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongodb = require('./db/connect');
 const port = process.env.PORT || 8080;
-app.use(cors()).use(bodyParser.json()).use('/', require('./routes/index.ts'));
+app.use(cors()).use(bodyParser.json()).use('/', require('./routes/index'));
 mongodb.initDb((err, mongodb) => {
     if (err) {
         console.log(err);

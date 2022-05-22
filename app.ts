@@ -9,7 +9,7 @@ const mongodb = require('./db/connect');
 
 const port = process.env.PORT || 8080;
 
-app.use(cors()).use(bodyParser.json()).use('/', require('./routes/index.ts'));
+app.use(cors()).use(bodyParser.json()).use('/', require('./routes/index'));
 
 mongodb.initDb((err: any, mongodb: any) => {
   if (err) {
