@@ -6,7 +6,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const mongodb = require('./db/connect.ts');
+const mongodb = require('./db/connect');
 const port = process.env.PORT || 8080;
 app.use(cors()).use(bodyParser.json()).use('/', require('./routes/index.ts'));
 mongodb.initDb((err, mongodb) => {
