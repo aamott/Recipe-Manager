@@ -5,11 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "nodemon app.ts",
     "format": "prettier --write ./**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint './**/*.{js,jsx,ts,tsx}' --fix",
-    "swagger-autogen": "node ./swagger.js"
+    "swagger-autogen": "ts-node ./swagger.ts"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/aamott/Recipe-Manager#readme",
   "dependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.34",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
@@ -30,12 +32,16 @@
     "mongodb": "^4.6.0",
     "nodemon": "^2.0.16",
     "swagger-autogen": "^2.21.1",
-    "swagger-ui-express": "^4.4.0",
+    "swagger-ui-express": "^4.4.0"
   },
   "devDependencies": {
+    "autogen": "^0.0.1",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "swagger": "^0.7.5",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4"
   }
 }
