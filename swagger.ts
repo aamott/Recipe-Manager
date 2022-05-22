@@ -2,11 +2,11 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    title: 'Recipes',
+    title: 'Recipe Manager',
     description: 'A web app for managing recipes'
   },
-  host: 'localhost:8080',
-  schemes: ['http']
+  host: 'therecipetracker.herokuapp.com',
+  schemes: ['https']
 };
 
 const outputFile = './swagger.json';
