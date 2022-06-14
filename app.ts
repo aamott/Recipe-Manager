@@ -5,7 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongodb = require('./db/connect');
-const { auth } = require('express-openid-connect');
+const { auth, requiresAuth } = require('express-openid-connect');
 
 
 /********
@@ -25,8 +25,11 @@ const config = {
 
 app.use(cors()).use(bodyParser.json())
 app.use(auth(config));
-app.use((req: { oidc: { isAuthenticated: () => any; }; }, res: { locals: { isAuthenticated: any; }; }, next: () => void) => {
+app.use((req: any, res: { locals: {
+  activeRoute: any; isAuthenticated: any; 
+}; }, next: () => void) => {
   res.locals.isAuthenticated = req.oidc.isAuthenticated();
+  // res.locals.activeRoute = req.originalUrl; // used if you want to redirect to the same page the user logged out from
   next();
 });
 
