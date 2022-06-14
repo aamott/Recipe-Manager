@@ -10,7 +10,32 @@
   "schemes": [
     "https"
   ],
+  "securityDefinitions": {
+    "oAuthSample": {
+      "type": "oauth2",
+      "authorizationUrl": "therecipetracker.herokuapp.com/login",
+      "flow": "implicit",
+      "scopes": {
+        "read_pets": "read your recipes",
+        "write_pets": "modify recipes in your account"
+      }
+    }
+  },
   "paths": {
+    "/authorized": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/sign-up": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/api-docs": {
       "get": {
         "description": "",
@@ -28,60 +53,16 @@
         "responses": {
           "200": {
             "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "description": "Create a new recipe. Returns the new recipe id.",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "category": {
-                  "example": "any"
-                },
-                "tags": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                },
-                "title": {
-                  "example": "any"
-                },
-                "ingredients": {
-                  "example": "any"
-                },
-                "instructions": {
-                  "example": "any"
-                },
-                "servings": {
-                  "example": "any"
-                },
-                "prepTime": {
-                  "example": "any"
-                },
-                "cookTime": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
           },
           "500": {
             "description": "Internal Server Error"
           }
         }
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
       }
     },
     "/recipes/{id}": {
@@ -101,6 +82,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -163,7 +147,10 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Delete a recipe",
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -172,7 +159,17 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     }
   }
