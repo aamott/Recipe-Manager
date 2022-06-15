@@ -5,6 +5,7 @@ import { ObjectId } from 'mongodb';
  */
 const mongodb = require('../db/connect');
 
+
 // Get all recipes
 const getAllRecipes = async (req: any, res: any) => {
   try {
@@ -17,6 +18,7 @@ const getAllRecipes = async (req: any, res: any) => {
     res.status(500).send(error);
   }
 };
+
 
 // Get a specific recipe
 const getRecipe = async (req: any, res: any) => {
@@ -37,12 +39,15 @@ const getRecipe = async (req: any, res: any) => {
   }
 };
 
+
 // Add a new recipe
 const addRecipe = async (req: any, res: any, _next: any) => {
   /*
     #swagger.description = "Create a new recipe. Returns the new recipe id."
   */
   //  Check required fields
+
+  console.log("req: ".concat(req.oidc.user));
   try {
     if (
       !req.body.category ||
@@ -59,6 +64,8 @@ const addRecipe = async (req: any, res: any, _next: any) => {
 
     //  Add recipe to database
     const newRecipe = {
+      ownerName: req.oidc.user.name,
+      ownerId: req.oidc.user.sub,
       title: req.body.title,
       category: req.body.category,
       description: req.body.description,
@@ -73,13 +80,14 @@ const addRecipe = async (req: any, res: any, _next: any) => {
     };
     const result = await mongodb.getDb().db().collection('recipes').insertOne(newRecipe);
 
-    //  Return new recipe id
+    // Return new recipe id
     res.setHeader('Content-Type', 'application/json');
     res.status(201).json(result.insertedId);
   } catch (error) {
     res.status(500).send(error);
   }
 };
+
 
 // Update a recipe
 const updateRecipe = async (req: any, res: any) => {
@@ -88,8 +96,23 @@ const updateRecipe = async (req: any, res: any) => {
   */
   try {
     const recipeId = new ObjectId(req.params.id);
-    //  Add recipe to database
+
+    // Check that the current user is the owner of the recipe
+    const recipe = await mongodb.getDb().db().collection('recipes').find({
+      _id: recipeId
+    });
+    recipe.toArray().then((lists: any[]) => {
+      if (lists[0].ownerId !== req.oidc.user.sub) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(403).json({ error: 'You are not the owner of this recipe' });
+        return;
+      }
+    });
+
+    // Update recipe
     const update = {
+      ownerName: req.oidc.user.name,
+      ownerId: req.oidc.user.sub,
       title: req.body.title,
       category: req.body.category,
       description: req.body.description,
@@ -99,10 +122,10 @@ const updateRecipe = async (req: any, res: any) => {
       ingredients: req.body.ingredients,
       instructions: req.body.instructions,
       tags: req.body.tags,
-      createdDate: new Date(),
+      createdDate: new Date(), // todo: keep the original created date
       updatedDate: new Date()
     };
-    const result = await mongodb.getDb().db().collection('contacts').updateOne(
+    const result = await mongodb.getDb().db().collection('recipes').updateOne(
       {
         _id: recipeId
       },
@@ -114,22 +137,37 @@ const updateRecipe = async (req: any, res: any) => {
     if (result.modifiedCount === 1) {
       res.status(200).json(result.modifiedCount);
     } else {
-      res.status(500).json(result.error || 'An error occured while updating contact');
+      res.status(500).json(result.error || 'An error occured while updating contact.');
     }
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
+
 // Delete a recipe
-const deleteRecipe = async ( req: any, res: any ) => {
+const deleteRecipe = async (req: any, res: any) => {
   /*
     #swagger.description = "Delete a recipe"
   */
   try {
-    const userId = new ObjectId(req.params.id);
+    const recipeId = new ObjectId(req.params.id);
+
+    // Check that the current user is the owner of the recipe
+    const recipe = await mongodb.getDb().db().collection('recipes').find({
+      _id: recipeId
+    });
+    recipe.toArray().then((lists: any[]) => {
+      if (lists[0].ownerId !== req.oidc.user.sub) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(403).json({ error: 'You are not the owner of this recipe' });
+        return;
+      }
+    });
+
+    // Delete recipe
     const result = await mongodb.getDb().db().collection('recipes').deleteOne({
-      _id: userId
+      _id: recipeId
     });
     res.setHeader('Content-Type', 'application/json');
 

@@ -3,6 +3,8 @@
  */
 // const express = require('express');
 import express from 'express';
+// const { auth, requiresAuth } = require('express-openid-connect');
+import { auth, requiresAuth } from 'express-openid-connect';
 const router = express.Router();
 const recipes = require('../controllers/recipes');
 
@@ -13,12 +15,12 @@ router.get('/', recipes.getAllRecipes);
 router.get('/:id', recipes.getRecipe);
 
 // Add a new recipe
-router.post('/', recipes.addRecipe);
+router.post('/', requiresAuth(), recipes.addRecipe);
 
 // Update a recipe
-router.put('/:id', recipes.updateRecipe);
+router.put('/:id', requiresAuth(), recipes.updateRecipe);
 
 // Delete a recipe
-router.delete('/:id', recipes.deleteRecipe);
+router.delete('/:id', requiresAuth(), recipes.deleteRecipe);
 
 module.exports = router;
