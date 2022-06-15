@@ -52,7 +52,6 @@ const addRecipe = (req, res, _next) => __awaiter(void 0, void 0, void 0, functio
       #swagger.description = "Create a new recipe. Returns the new recipe id."
     */
     //  Check required fields
-    return;
     console.log("req: ".concat(req.oidc.user));
     try {
         if (!req.body.category ||
@@ -67,6 +66,8 @@ const addRecipe = (req, res, _next) => __awaiter(void 0, void 0, void 0, functio
         }
         //  Add recipe to database
         const newRecipe = {
+            ownerName: req.oidc.user.name,
+            ownerId: req.oidc.user.sub,
             title: req.body.title,
             category: req.body.category,
             description: req.body.description,
@@ -95,8 +96,21 @@ const updateRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     */
     try {
         const recipeId = new mongodb_1.ObjectId(req.params.id);
-        //  Add recipe to database
+        // Check that the current user is the owner of the recipe
+        const recipe = yield mongodb.getDb().db().collection('recipes').find({
+            _id: recipeId
+        });
+        recipe.toArray().then((lists) => {
+            if (lists[0].ownerId !== req.oidc.user.sub) {
+                res.setHeader('Content-Type', 'application/json');
+                res.status(403).json({ error: 'You are not the owner of this recipe' });
+                return;
+            }
+        });
+        // Update recipe
         const update = {
+            ownerName: req.oidc.user.name,
+            ownerId: req.oidc.user.sub,
             title: req.body.title,
             category: req.body.category,
             description: req.body.description,
@@ -109,7 +123,7 @@ const updateRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             createdDate: new Date(),
             updatedDate: new Date()
         };
-        const result = yield mongodb.getDb().db().collection('contacts').updateOne({
+        const result = yield mongodb.getDb().db().collection('recipes').updateOne({
             _id: recipeId
         }, {
             $set: update
@@ -119,7 +133,7 @@ const updateRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             res.status(200).json(result.modifiedCount);
         }
         else {
-            res.status(500).json(result.error || 'An error occured while updating contact');
+            res.status(500).json(result.error || 'An error occured while updating contact.');
         }
     }
     catch (error) {
@@ -132,9 +146,21 @@ const deleteRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* (
       #swagger.description = "Delete a recipe"
     */
     try {
-        const userId = new mongodb_1.ObjectId(req.params.id);
+        const recipeId = new mongodb_1.ObjectId(req.params.id);
+        // Check that the current user is the owner of the recipe
+        const recipe = yield mongodb.getDb().db().collection('recipes').find({
+            _id: recipeId
+        });
+        recipe.toArray().then((lists) => {
+            if (lists[0].ownerId !== req.oidc.user.sub) {
+                res.setHeader('Content-Type', 'application/json');
+                res.status(403).json({ error: 'You are not the owner of this recipe' });
+                return;
+            }
+        });
+        // Delete recipe
         const result = yield mongodb.getDb().db().collection('recipes').deleteOne({
-            _id: userId
+            _id: recipeId
         });
         res.setHeader('Content-Type', 'application/json');
         if (result.deletedCount === 1) {

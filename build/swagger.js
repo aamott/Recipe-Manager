@@ -6,11 +6,13 @@ const doc = {
         description: 'A web app for managing recipes'
     },
     host: 'therecipetracker.herokuapp.com',
+    // host: 'localhost:8080',
     schemes: ['https'],
     securityDefinitions: {
         oAuthSample: {
             type: 'oauth2',
             authorizationUrl: 'therecipetracker.herokuapp.com/login',
+            // authorizationUrl: 'localhost:8080/login',
             flow: 'implicit',
             scopes: {
                 read_pets: 'read your recipes',
