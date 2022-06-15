@@ -33,7 +33,7 @@ app.use((req: any, res: { locals: {
   next();
 });
 
-
+console.log('testing');
 
 /*********
  * Routes 
