@@ -11,7 +11,7 @@ const doc = {
   securityDefinitions: {
     oAuthSample: {
       type: 'oauth2',
-      authorizationUrl: 'therecipetracker.herokuapp.com/login',
+      authorizationUrl: 'https://therecipetracker.herokuapp.com/login',
       // authorizationUrl: 'localhost:8080/login',
       flow: 'implicit',
       scopes: {

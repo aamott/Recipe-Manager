@@ -13,7 +13,7 @@
   "securityDefinitions": {
     "oAuthSample": {
       "type": "oauth2",
-      "authorizationUrl": "therecipetracker.herokuapp.com/login",
+      "authorizationUrl": "https://therecipetracker.herokuapp.com/login",
       "flow": "implicit",
       "scopes": {
         "read_recipes": "read your recipes",
