@@ -15,8 +15,8 @@ const doc = {
       // authorizationUrl: 'localhost:8080/login',
       flow: 'implicit',
       scopes: {
-        read_pets: 'read your recipes',
-        write_pets: 'modify recipes in your account'
+        read_recipes: 'read your recipes',
+        write_recipes: 'modify recipes in your account'
       }
     }
   }
